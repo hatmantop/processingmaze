@@ -1,7 +1,7 @@
 int blocksize = 35;
 int blockgap = 5;
-int w = 8;
-int h = 8;
+int w = 5;
+int h = 5;
 int offset = 100;
 int selStartX;
 int selStartY;
@@ -161,5 +161,64 @@ void keyPressed() {
     startSelect = false;
     endSelect = false;
     println("Wall mode ON");
+  } else if (key == 'c') {
+    clear(); 
+  } else if (key == 'r') {
+    generateMazeRecursive();  
+    
   }
+}
+
+void clear() {
+  println("clearing");
+  for (int i = 0; i < h; i++) {
+    for (int j = 0; j < w + 1; j++) {
+      vWalls[i][j] = false;
+    }
+  }
+  for (int i = 0; i < h + 1; i++) {
+    for (int j = 0; j < w; j++) {
+      hWalls[i][j] = false;
+    }
+  }
+  selStartX = -1;
+  selStartY = -1;
+  selEndX = -1;
+  selEndY = -1;
+}
+
+void generateMazeRecursive() {
+  clear();
+  recGenHelp(0, w, 0, h); 
+  
+  
+  
+}
+
+void recGenHelp(int leftX, int rightX, int upY, int botY){
+  println("leftX: " + leftX);
+  println("rightX: " + rightX);
+  println("upY: " + upY);
+  println("botY: " + botY);
+  if(rightX - leftX > 1 && botY - upY > 1) {
+    int col = (int) random(leftX + 1, rightX);
+    int row = (int) random(upY + 1, botY);
+    for(int i = upY; i < botY; i++) {
+      vWalls[i][col] = true;
+    }
+    
+    int rowGap = (int) random(upY, botY);
+    vWalls[rowGap][col] = false;
+    
+    for(int i = leftX; i < rightX; i++) {
+      hWalls[row][i] = true;
+    }
+    int colGap = (int) random(leftX, rightX);
+    hWalls[row][colGap] = false;
+    recGenHelp(col, rightX, upY, row);
+    recGenHelp(leftX, col, row, botY);
+    recGenHelp(col, rightX, row, botY);
+    recGenHelp(leftX, col, upY, row);
+  }
+  
 }
