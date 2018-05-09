@@ -1,7 +1,7 @@
 int blocksize = 35;
 int blockgap = 5;
-int w = 5;
-int h = 5;
+int w = 15;
+int h = 15;
 int offset = 100;
 int selStartX;
 int selStartY;
@@ -15,7 +15,7 @@ boolean[][] vWalls;
 boolean[][] hWalls;
 
 void setup() {
-  size(500, 500);
+  size(800, 800);
   background(255);
   vWalls = new boolean[h][w+1];
   hWalls = new boolean[h+1][w];
@@ -29,6 +29,9 @@ void draw() {
   background(255);
   fill(200);
   noStroke();
+  
+  fill(82, 186, 234);
+  rect(offset - blockgap, offset - blockgap, blockgap + w * (blocksize + blockgap), blockgap + h * (blocksize + blockgap));
 
   // draw vWalls;
   for (int i = 0; i < h; i++) {
@@ -41,7 +44,7 @@ void draw() {
         if (mouseX >= xPos && mouseX <= xPos + blockgap && mouseY >= yPos && mouseY <= yPos + blocksize) {
           fill(125, 30, 30);
         } else {
-          fill(200);
+          fill(100, 186, 255);
         }
       }
       rect(xPos, yPos, blockgap, blocksize);
@@ -59,7 +62,7 @@ void draw() {
         if (mouseX >= xPos && mouseX <= xPos + blocksize && mouseY >= yPos && mouseY <= yPos + blockgap) {
           fill(125, 30, 30);
         } else {
-          fill(200);
+          fill(100, 186, 255);
         }
       }
       rect(xPos, yPos, blocksize, blockgap);
@@ -87,13 +90,13 @@ void mousePressed() {
           int col = (mouseX - offset) / (blocksize + blockgap);
           println("row: " + row);
           println("col: " + col);
-          if(startSelect) {
+          if (startSelect) {
             selStartX = col;
             selStartY = row;
           } else {
             selEndX = col;
             selEndY = row;
-          } 
+          }
         }
       }
     }
@@ -134,7 +137,7 @@ void mousePressed() {
 void keyPressed() {
   if (key == 'g') {
     println("constructing maze...");
-    if(selStartX < 0 || selEndX < 0) {
+    if (selStartX < 0 || selEndX < 0) {
       println("select a start and end");
       return;
     }
@@ -162,15 +165,15 @@ void keyPressed() {
     endSelect = false;
     println("Wall mode ON");
   } else if (key == 'c') {
-    clear(); 
+    println("clearing");
+    clear();
   } else if (key == 'r') {
-    generateMazeRecursive();  
-    
+    generateMazeRecursive();
   }
 }
 
 void clear() {
-  println("clearing");
+  
   for (int i = 0; i < h; i++) {
     for (int j = 0; j < w + 1; j++) {
       vWalls[i][j] = false;
@@ -189,36 +192,59 @@ void clear() {
 
 void generateMazeRecursive() {
   clear();
-  recGenHelp(0, w, 0, h); 
-  
-  
-  
+  recGenHelp(0, w, 0, h);
 }
 
-void recGenHelp(int leftX, int rightX, int upY, int botY){
+void recGenHelp(int leftX, int rightX, int upY, int botY) {
+  /*
   println("leftX: " + leftX);
   println("rightX: " + rightX);
   println("upY: " + upY);
   println("botY: " + botY);
-  if(rightX - leftX > 1 && botY - upY > 1) {
-    int col = (int) random(leftX + 1, rightX);
-    int row = (int) random(upY + 1, botY);
-    for(int i = upY; i < botY; i++) {
-      vWalls[i][col] = true;
+  */
+  
+  boolean horz = ((int) random(2) == 1) ? true : false;
+  if(rightX - leftX <= 1){
+    horz = true;
+  } else if(botY - upY <= 1) {
+    horz = false;
+  }
+  
+  if (horz) {
+    if(botY - upY <= 1) {
+      return;
     }
-    
-    int rowGap = (int) random(upY, botY);
-    vWalls[rowGap][col] = false;
-    
-    for(int i = leftX; i < rightX; i++) {
+    int row = (int) random(upY + 1, botY);
+    for (int i = leftX; i < rightX; i++) {
       hWalls[row][i] = true;
     }
     int colGap = (int) random(leftX, rightX);
     hWalls[row][colGap] = false;
-    recGenHelp(col, rightX, upY, row);
-    recGenHelp(leftX, col, row, botY);
-    recGenHelp(col, rightX, row, botY);
-    recGenHelp(leftX, col, upY, row);
+    recGenHelp(leftX, rightX, upY, row);
+    recGenHelp(leftX, rightX, row, botY);
+  } else {
+    if(rightX - leftX <= 1) {
+      return;
+    }
+    int col = (int) random(leftX + 1, rightX);
+    for (int i = upY; i < botY; i++) {
+      vWalls[i][col] = true;
+    }
+    int rowGap = (int) random(upY, botY);
+    vWalls[rowGap][col] = false;
+    recGenHelp(leftX, col, upY, botY);
+    recGenHelp(col, rightX, upY, botY); 
   }
+
+  
+}
+
+void export() {
+      
+  
+}
+
+void load() {
+ 
   
 }
