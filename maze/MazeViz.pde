@@ -19,7 +19,7 @@ class MazeViz extends MazeRecord {
         path[i][j] = 0;
       }
     }
-
+    resetNodes();
     vizSet = new HashSet<MazeNode>();
     for (MazeNode[] c : nodes) {
       for (MazeNode n : c) {
@@ -31,7 +31,7 @@ class MazeViz extends MazeRecord {
   }
 
   public int[][] step() {
-    if (path == null || vizSet == null || vizSet.isEmpty()) {
+    if (path == null || vizSet == null) {
       throw new IllegalStateException("path: " + path + "\nvisSet:" + vizSet);
     }
 
@@ -83,7 +83,10 @@ class MazeViz extends MazeRecord {
 
   public void endDijkstra() {
     resetNodes();
+    vizSet = null;
     path = null;
+    backTrace = false;
+    current = null;
   }
 
   public int[][] path() {

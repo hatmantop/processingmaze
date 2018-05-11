@@ -1,7 +1,7 @@
 int blocksize = 35;
 int blockgap = 5;
-int w = 15;
-int h = 15;
+int w = 30;
+int h = 30;
 int offset = 100;
 int selStartX;
 int selStartY;
@@ -20,7 +20,7 @@ boolean[][] hWalls;
 int[][] path;
 
 void setup() {
-  size(800, 800);
+  size(1500, 1500);
   background(255);
   vWalls = new boolean[h][w+1];
   hWalls = new boolean[h+1][w];
@@ -163,6 +163,11 @@ void doVis() {
 
 void clear() {
   path = null;
+  vis = false;
+  if (v != null) {
+    v.endDijkstra();
+    v = null;
+  }
   for (int i = 0; i < h; i++) {
     for (int j = 0; j < w + 1; j++) {
       vWalls[i][j] = false;
@@ -187,6 +192,14 @@ void generateMazeRecursive(boolean rand) {
   } else {
     boolean start = (int) random(2) == 1;
     recGenHelpNoRand(0, w, 0, h, start);
+  }
+  selStartX = (int) random(w);
+  selStartY = (int) random(h);
+  selEndX = (int) random(w);
+  selEndY = (int) random(h);
+  while (selStartX == selEndX && selStartY == selEndY) {
+    selEndX = (int) random(w);
+    selEndY = (int) random(h);
   }
 }
 
@@ -283,16 +296,16 @@ void drawPath() {
           fill(125, 231, 120);
         } else if (path[i][j] == 3) {
           fill(20, 55, 80);
-        } else if(path[i][j] == 4) {
-         fill(123, 54, 20); 
+        } else if (path[i][j] == 4) {
+          fill(123, 54, 20);
         } else {
-         fill(255); 
+          noFill();
         }
         rect(offset + j * (blocksize + blockgap), offset + i * (blocksize + blockgap), blocksize, blocksize);
       }
     }
   } else { 
-    println("path is null");  
+    println("path is null");
   }
 }
 
