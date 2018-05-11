@@ -11,6 +11,9 @@ int selEndX;
 int selEndY;
 boolean endSelect;
 
+boolean vis;
+MazeViz v;
+
 boolean[][] vWalls;
 boolean[][] hWalls;
 
@@ -26,6 +29,8 @@ void setup() {
   selStartY = -1;
   selEndX = -1;
   selEndY = -1;
+  vis = false;
+  v = null;
 }
 
 void draw() {
@@ -34,6 +39,9 @@ void draw() {
   noStroke();
   fill(82, 186, 234);
   rect(offset - blockgap, offset - blockgap, blockgap + w * (blocksize + blockgap), blockgap + h * (blocksize + blockgap));
+  if (vis) {
+    path = v.step();
+  }
   drawPath();
   drawMaze();
 }
@@ -134,8 +142,23 @@ void keyPressed() {
   } else if (key == 'r') {
     generateMazeRecursive(false);
   } else if (key == 'f') {
-    displayFoundPath();
+    //displayFoundPath();
+  } else if (key == 'v') {
+    println("vis");
+    doVis();
   }
+}
+
+void doVis() {
+
+  if (selStartX < 0 || selEndX < 0) {
+    println("select a start and end");
+    return;
+  }
+  vis = true;
+  v = new MazeViz(h, w, selStartX, selStartY, selEndX, selEndY, vWalls, hWalls);
+  v.startDijkstra();
+  path = v.path();
 }
 
 void clear() {
@@ -156,8 +179,6 @@ void clear() {
   selEndY = -1;
 }
 
-void displayFoundPath() {
-}
 
 void generateMazeRecursive(boolean rand) {
   clear();
@@ -256,17 +277,27 @@ void drawPath() {
   if (path != null) {
     for (int i = 0; i < h; i ++) {
       for (int j = 0; j < w; j++) {
-        if(path[i][j] == 1) {
+        if (path[i][j] == 1) {
           fill(255, 255, 0);
-          rect(offset + j * (blocksize + blockgap), offset + i * (blocksize + blockgap), blocksize, blocksize);
+        } else if (path[i][j] == 2) {
+          fill(125, 231, 120);
+        } else if (path[i][j] == 3) {
+          fill(20, 55, 80);
+        } else if(path[i][j] == 4) {
+         fill(123, 54, 20); 
+        } else {
+         fill(255); 
         }
+        rect(offset + j * (blocksize + blockgap), offset + i * (blocksize + blockgap), blocksize, blocksize);
       }
     }
+  } else { 
+    println("path is null");  
   }
 }
 
 void drawMaze() {
-  
+
 
   // draw vWalls;
   for (int i = 0; i < h; i++) {
