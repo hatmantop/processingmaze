@@ -184,6 +184,9 @@ void clear() {
   selEndY = -1;
 }
 
+void generateMazeRandDijkstra() {
+    
+}
 
 void generateMazeRecursive(boolean rand) {
   clear();
@@ -281,6 +284,7 @@ void recGenHelpRand(int leftX, int rightX, int upY, int botY) {
 }
 
 void export() {
+  
 }
 
 void load() {

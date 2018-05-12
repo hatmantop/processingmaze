@@ -90,6 +90,25 @@ class MazeRecord {
       println();
     }
   }
+  
+  void randomDFSGen(boolean[][] vWalls, boolean[][] hWalls) {
+      for(int i = 0; i < hite; i++) {
+        for(int j = 0; j < wide + 1; j++) {
+          vWalls[i][j] = true;
+        }
+      }
+      for(int i = 0; i < hite + 1; i++) {
+        for(int j = 0; j < wide; j++) {
+          hWalls[i][j] = true;
+        }
+      }
+      
+      
+      
+      
+  }
+  
+  //void randomDFSGenHelp(boolean[][] vWalls, boolean[][] hWalls, Stack<MazeNode> s)
 
   boolean recValid(MazeNode m) {
 
