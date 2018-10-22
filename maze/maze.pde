@@ -1,11 +1,12 @@
-int blocksize = 35;
-int blockgap = 5;
-int w = 30;
-int h = 30;
-int offset = 100;
+final int blocksize = 35;
+final int blockgap = 5;
+int w;
+int h;
+int offset;
 int selStartX;
 int selStartY;
 boolean startSelect;
+color bg = color(120,120,120);
 
 int selEndX;
 int selEndY;
@@ -20,8 +21,12 @@ boolean[][] hWalls;
 int[][] path;
 
 void setup() {
-  size(1500, 1500);
-  background(255);
+  size(1000, 1000);
+  background(bg);
+  w = (width-blockgap)/(blocksize + blockgap);
+  h = (height-blockgap)/(blocksize + blockgap);
+  offset = ((width - ((blocksize + blockgap) * w + blockgap)) / 2) + blockgap;
+  //offset = blockgap;
   vWalls = new boolean[h][w+1];
   hWalls = new boolean[h+1][w];
   path = null;
@@ -34,7 +39,7 @@ void setup() {
 }
 
 void draw() {
-  background(255);
+  background(bg);
   fill(200);
   noStroke();
   fill(82, 186, 234);
@@ -182,10 +187,6 @@ void clear() {
   selStartY = -1;
   selEndX = -1;
   selEndY = -1;
-}
-
-void generateMazeRandDijkstra() {
-    
 }
 
 void generateMazeRecursive(boolean rand) {
