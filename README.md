@@ -12,4 +12,6 @@ A maze is valid when the start and the end can be connected.
 
 'r': randomly generate a new maze with recursive division
 
-'g': generate the maze and display its path
+'g': generate path for current maze
+
+'v': show a visualization of the maze being solved
